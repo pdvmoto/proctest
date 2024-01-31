@@ -2,3 +2,42 @@ to test, I need a standard set of actions.
 code wise, all opions can be scripted.
 load-wise, I suggest plsql and dd to generate load
 the web-page viewing is more diff to automate
+
+procstat -V
+
+procstat -h 
+
+procstat -A -w -I 5 -o sar-u
+
+procstat -o sar-u
+procstat -o sar-u-ALL
+procstat -o cpu-all
+procstat -o  mpstat-P-ALL
+procstat -o  per-cpu-all
+procstat -o  sar-d
+procstat -o  sar-b
+procstat -o  sar-B
+procstat -o  sar-H
+procstat -o  sar-S
+procstat -o  iostat
+procstat -o  iostat-x
+procstat -o  sar-r
+procstat -o  sar-r-ALL
+procstat -o  sar-n-DEV
+procstat -o  sar-n-EDEV
+procstat -o  sar-q-LOAD
+procstat -o  sar-q
+procstat -o  sar-q-CPU
+procstat -o  sar-q-IO
+procstat -o  sar-q-MEM
+procstat -o  sar-W
+procstat -o  sar-w
+procstat -o  vmstat 
+
+
+suggestions:
+
+s1: a -c or --count opiont: collect only n samples, 
+this will also facilitate automated testing and no need for Control-C to stop a run.
+
+s2: the Archve: organize it by timestamp, instead of by data-group. every "line" or entery could be 1 timestamp, with the data (hierarchy) behind it.
