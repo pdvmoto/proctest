@@ -38,12 +38,13 @@ procstat -A -w -I 5 -o  sar-w
 procstat -A -w -I 5 -o  vmstat 
 
 better: compose command from set of choices
+define $duration
 define $arhiveopt
 define $outputopt
 define $webout_and_port_opt
 
 then run: 
-procstat $archiveop $outputopt $webout_and_port 
+timeout $duration procstat $archiveop $outputopt $webout_and_port 
 
 
 suggestions:
