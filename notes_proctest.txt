@@ -1,0 +1,4 @@
+to test, I need a standard set of actions.
+code wise, all opions can be scripted.
+load-wise, I suggest plsql and dd to generate load
+the web-page viewing is more diff to automate
