@@ -9,35 +9,153 @@ procstat -h
 
 procstat -A -w -I 5 -o sar-u
 
-procstat -o sar-u
-procstat -o sar-u-ALL
-procstat -o cpu-all
-procstat -o  mpstat-P-ALL
-procstat -o  per-cpu-all
-procstat -o  sar-d
-procstat -o  sar-b
-procstat -o  sar-B
-procstat -o  sar-H
-procstat -o  sar-S
-procstat -o  iostat
-procstat -o  iostat-x
-procstat -o  sar-r
-procstat -o  sar-r-ALL
-procstat -o  sar-n-DEV
-procstat -o  sar-n-EDEV
-procstat -o  sar-q-LOAD
-procstat -o  sar-q
-procstat -o  sar-q-CPU
-procstat -o  sar-q-IO
-procstat -o  sar-q-MEM
-procstat -o  sar-W
-procstat -o  sar-w
-procstat -o  vmstat 
+procstat -A -w -I 5 -o sar-u
+procstat -A -w -I 5 -o sar-u-ALL
+procstat -A -w -I 5 -o cpu-all
+procstat -A -w -I 5 -o  mpstat-P-ALL
+procstat -A -w -I 5 -o  per-cpu-all
+procstat -A -w -I 5 -o  sar-d
+procstat -A -w -I 5 -o  sar-b
+procstat -A -w -I 5 -o  sar-B
+procstat -A -w -I 5 -o  sar-H
+procstat -A -w -I 5 -o  sar-S
+procstat -A -w -I 5 -o  iostat
+procstat -A -w -I 5 -o  iostat-x
+procstat -A -w -I 5 -o  sar-r
+procstat -A -w -I 5 -o  sar-r-ALL
+procstat -A -w -I 5 -o  sar-n-DEV
+procstat -A -w -I 5 -o  sar-n-EDEV
+procstat -A -w -I 5 -o  sar-q-LOAD
+procstat -A -w -I 5 -o  sar-q
+procstat -A -w -I 5 -o  sar-q-CPU
+procstat -A -w -I 5 -o  sar-q-IO
+procstat -A -w -I 5 -o  sar-q-MEM
+procstat -A -w -I 5 -o  sar-W
+procstat -A -w -I 5 -o  sar-w
+procstat -A -w -I 5 -o  vmstat 
+
+better: compose command from set of choices
+define $arhiveopt
+define $outputopt
+define $webout_and_port_opt
 
 
 suggestions:
+
+s0: archive name: some charater prefix. for ex: procstatnn or procstat<timestamp>. just a naked timestamp is strange for a filename, and gives no info on what is inside the file
 
 s1: a -c or --count opiont: collect only n samples, 
 this will also facilitate automated testing and no need for Control-C to stop a run.
 
 s2: the Archve: organize it by timestamp, instead of by data-group. every "line" or entery could be 1 timestamp, with the data (hierarchy) behind it.
+It looks like the archive-format contains the data in a sequence that is convenient to draw graphs for 1 category (e.g. the cpu-data is listed as an array of timestamps with cpu-info). but to save and commit  data after every measurement, the archive would need to be organized by timestamp.
+
+s2a: suggest to put less text in Archive. if the amount of data or the strucrure of the data can differ per machine or per procsta-run, is it possible to store the structure in the "first line", and fill the subsequent lines with only the data-values, leaving out the definitions.  E.g. define the record-structure just once, and then only reapeat the data-content for each record.
+
+
+first suggestion for output file:
+
+concept, example of 4 json-objects, representing 4 timestamps:
+{ "timestamp": ts, <set of data from this timestamp> } 
+{ "timestamp": ts, <set of data from this timestamp> } 
+{ "timestamp": ts, <set of data from this timestamp> } 
+{ "timestamp": ts, <set of data from this timestamp> } 
+
+
+second example, in more detail:
+{ "timestamp": ts1, 
+  "cpu":          [ <array of cpu data> ], 
+  "memory":       [ <array of mem data> ], 
+  "blockdevices":   [ <array of devices followed by Total> ], 
+  "networkdevices": [ <array of devices followed by Total> ],
+  "loadavg" :     [ <array> ],
+  "pressure":     [ <array> ],
+  "vmstat":       [ <array> ]
+}
+{ "timestamp": ts2 
+  "cpu":            [ <array of cpu data> ], 
+  "memory":         [ <array of mem data> ], 
+  "blockdevices":   [ <array of devices followed by Total> ], 
+  "networkdevices": [ <array of devices followed by Total> ],
+  "loadavg" :       [ <array> ],
+  "pressure":       [ <array> ],
+  "vmstat":         [ <array> ]
+}
+... and repeat for every timestamp that gets samples..
+
+
+
+third and final exammple, with real data...
+{ "content": "procstat-data" }
+{ "timestamp": "2024-01-30T19:29:19.253159607+01:00",
+  "cpu": [
+    {
+      "remove_this": "I removed timestamp here.",
+      "user": 0,
+      "nice": 0,
+      "system": 0,
+      "idle": 1.931931931931932,
+      "iowait": 0,
+      "irq": 0.02002002002002002,
+      "softirq": 0,
+      "steal": 0,
+      "guest": 0,
+      "guest_nice": 0,
+      "scheduler_running": 0.0389033053053053,
+      "scheduler_waiting": 0.02210963063063063
+    },
+  ],
+  "memory": [
+    {
+      "remove_this": "I removed timestamp here.",
+      "memfree": 174336,
+      "memavailable": 517148,
+      "memtotal": 1754560,
+      "buffers": 0,
+      "cached": 1201044,
+      "swapcached": 29180,
+      "kernelstack": 3168,
+      "hardwarecorrupted": 0,
+      "slab": 88180,
+      "pagetables": 74220,
+      "dirty": 28,
+      "shmem": 872564,
+      "mapped": 721048,
+      "anonpages": 167688,
+      "hugepages_total": 0,
+      "hugepages_free": 0,
+      "hugepagesize": 2048,
+      "swaptotal": 4194300,
+      "swapfree": 3774716
+    },
+  ],
+"blockdevices": [
+    {
+      "remove_this": "I removed timestamp here.",
+      "device_name": "dm-0",
+      "reads_completed_success": 0,
+      "reads_merged": 0,
+      "reads_bytes": 0,
+      "reads_time_spent_ms": 0,
+      "writes_completed_success": 0,
+      "writes_merged": 0,
+      "writes_bytes": 0,
+      "writes_time_spent_ms": 0,
+      "ios_in_progress": 0,
+      "ios_time_spent_ms": 0,
+      "ios_weighted_time_spent_ms": 0,
+      "discards_completed_success": 0,
+      "discards_merged": 0,
+      "discards_bytes": 0,
+      "discards_time_spent_ms": 0,
+      "flush_requests_completed_success": 0,
+      "flush_requests_time_spent_ms": 0,
+      "inflight_reads": 0,
+      "inflight_writes": 0,
+      "queue_max_sectors_kb": 0,
+      "queue_max_hw_sectors_kb": 0,
+      "queue_nr_requests": 0
+    },
+
+}
+
