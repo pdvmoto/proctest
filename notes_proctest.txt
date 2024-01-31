@@ -3,6 +3,9 @@ code wise, all opions can be scripted.
 load-wise, I suggest plsql and dd to generate load
 the web-page viewing is more diff to automate
 
+trick, use dd to force swapping of other processes
+dd if=/dev/sda of=/dev/null bs=1G iflag=fullblock 
+
 procstat -V
 
 procstat -h 
@@ -38,6 +41,9 @@ better: compose command from set of choices
 define $arhiveopt
 define $outputopt
 define $webout_and_port_opt
+
+then run: 
+procstat $archiveop $outputopt $webout_and_port 
 
 
 suggestions:
